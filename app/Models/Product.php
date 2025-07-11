@@ -18,6 +18,7 @@ class Product extends Model
         'stock',
     ];
 
+    // Here : The relationships
     // Product relationship with brand
     public function brand()
     {
@@ -52,5 +53,10 @@ class Product extends Model
     public function sizes()
     {
         return $this->belongsToMany(Size::class, 'product_color_size')->withTimestamps();
+    }
+
+    public function firstImage()
+    {
+        return $this->hasOne(ProductImage::class)->latestOfMany();
     }
 }
