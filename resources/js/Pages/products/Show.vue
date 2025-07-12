@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
+import AppLayout from '@/Layouts/AppLayout.vue'
 
 const { product } = defineProps({
     product: Object
@@ -33,6 +34,7 @@ function addToCart() {
 </script>
 
 <template>
+    <AppLayout>
     <div class="bg-gray-50 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
         <div
             class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-4 sm:p-6 transition-all duration-300 hover:shadow-xl">
@@ -114,4 +116,5 @@ function addToCart() {
             </div>
         </div>
     </div>
+    </AppLayout>
 </template>
