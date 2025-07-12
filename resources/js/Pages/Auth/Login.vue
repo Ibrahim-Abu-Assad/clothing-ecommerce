@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 defineProps({
     canResetPassword: {
@@ -30,6 +31,7 @@ const submit = () => {
 </script>
 
 <template>
+    <AppLayout>
     <GuestLayout>
         <Head title="Log in" />
 
@@ -97,4 +99,5 @@ const submit = () => {
             </div>
         </form>
     </GuestLayout>
+    </AppLayout>
 </template>
