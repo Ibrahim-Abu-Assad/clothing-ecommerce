@@ -16,6 +16,14 @@ class Product extends Model
         'category_id',
         'price',
         'stock',
+        'sizes',
+        'colors',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'sizes' => 'array',
+        'colors' => 'array',
     ];
 
     // Here : The relationships
@@ -55,6 +63,7 @@ class Product extends Model
         return $this->belongsToMany(Size::class, 'product_color_size')->withTimestamps();
     }
 
+    // return the oldest image
     public function firstImage()
     {
         return $this->hasOne(ProductImage::class)->latestOfMany();

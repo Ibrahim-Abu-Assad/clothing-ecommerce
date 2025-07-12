@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('brand_id')->constrained()->onDelete('cascade');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->decimal('price', 8, 2);
+            $table->json('sizes')->nullable();
+            $table->json('colors')->nullable();
             $table->integer('stock')->default(0); // (Quantity) / number of products available in stock
             $table->timestamps();
         });

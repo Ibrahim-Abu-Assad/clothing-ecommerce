@@ -43,4 +43,26 @@ class ProductController extends Controller
             ]),
         ]);
     }
+
+    /*
+
+        Maybe I will edit this :
+
+        'colors' => $product->colors->pluck('name'),
+        'sizes' => $product->sizes->pluck('name'),
+
+    */
+
+    public function show(Product $product)
+    {
+        $product->load('images');
+
+        return Inertia::render('products/Show', [
+            'product' => [
+                ...$product->toArray(),
+                'colors' => $product->colors,
+                'sizes' => $product->sizes,
+            ],
+        ]);
+    }
 }
