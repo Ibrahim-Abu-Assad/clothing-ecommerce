@@ -13,12 +13,25 @@ class CartController extends Controller
     {
         $cart = session()->get('cart', []);
 
-        foreach ($cart as $key => $item) {
-            $product = Product::find($item['product_id']);
-            $cart[$key]['stock'] = $product ? $product->stock : 0;
-        }
+        // foreach ($cart as $key => $item) {
+        //     $product = Product::find($item['product_id']);
+        //     $cart[$key]['stock'] = $product ? $product->stock : 0;
+        // }
 
-        $total = collect($cart)->sum(fn($item) => $item['quantity'] * ($item['price'] ?? 0));
+        foreach ($cart as $key => &$item) { // <--- CHANGE 1: Added '&' here
+            $product = Product::find($item['product_id']);
+            $item['stock'] = $product ? $product->stock : 0;
+
+            // <--- CHANGE 2: Add this line to format the item's price
+            $item['price'] = number_format((float)($item['price'] ?? 0), 2, '.', '');
+        }
+        unset($item); // <--- IMPORTANT: Add this line after the loop
+
+        // $total = collect($cart)->sum(fn($item) => $item['quantity'] * ($item['price'] ?? 0));
+
+        $total = collect($cart)->sum(fn($item) => (float)($item['quantity'] ?? 0) * (float)($item['price'] ?? 0));
+        // <--- CHANGE 3: Add this line to format the overall total
+        $total = number_format($total, 2, '.', '');
 
         return Inertia::render('Cart/Index', [
             'cartItems' => $cart,

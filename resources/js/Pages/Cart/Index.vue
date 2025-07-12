@@ -397,7 +397,7 @@ const removeItem = (key) => {
                         <!-- Subtotal -->
                         <div class="col-span-2 text-center font-medium text-gray-800">
                             <span class="md:hidden text-sm text-gray-500">Subtotal: </span>
-                            ${{ (item.price ?? 0) * item.quantity }}
+                            ${{ ((item.price ?? 0) * item.quantity).toFixed(2) }}
                         </div>
 
                         <!-- Remove -->
