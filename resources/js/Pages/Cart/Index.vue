@@ -19,7 +19,7 @@
         </svg>
       </div>
       <p class="text-gray-600 text-lg mb-4">Your cart is empty</p>
-      <a href="/products" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+      <a :href="route('products.index')" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
         Continue Shopping
       </a>
     </div>
@@ -68,7 +68,7 @@
             <form :action="route('cart.update', key)" method="POST" class="flex items-center justify-center space-x-2">
               <input type="hidden" name="_method" value="PATCH" />
               <input type="hidden" name="_token" :value="csrf" />
-              <input type="number" name="quantity" :value="item.quantity" min="1" max="10"
+              <input type="number" name="quantity" :value="item.quantity" min="1" :max="item.stock"
                      class="w-16 border border-gray-300 rounded-lg px-3 py-2 text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
               <button type="submit"
                       class="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">

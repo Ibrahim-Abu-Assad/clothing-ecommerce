@@ -8,10 +8,16 @@ use Inertia\Inertia;
 
 class CartController extends Controller
 {
+
     public function index()
     {
         $cart = session()->get('cart', []);
-        // dd($cart);
+
+        foreach ($cart as $key => $item) {
+            $product = Product::find($item['product_id']);
+            $cart[$key]['stock'] = $product ? $product->stock : 0;
+        }
+
         $total = collect($cart)->sum(fn($item) => $item['quantity'] * ($item['price'] ?? 0));
 
         return Inertia::render('Cart/Index', [
@@ -22,9 +28,6 @@ class CartController extends Controller
 
     public function store(Request $request)
     {
-
-        // dd($request->all());
-
         $validated = $request->validate([
             'product_id' => 'required|integer',
             'size' => 'required|string',
@@ -33,14 +36,27 @@ class CartController extends Controller
         ]);
 
         $product = Product::findOrFail($validated['product_id']);
-        // dd($product);
+
+        if ($validated['quantity'] > $product->stock) {
+            return redirect()->back()
+                ->with('error', 'Sorry, the quantity requested exceeds available stock.')
+                ->withInput();
+        }
 
         $cart = session()->get('cart', []);
 
         $key = $validated['product_id'] . '_' . $validated['size'] . '_' . $validated['color'];
 
         if (isset($cart[$key])) {
-            $cart[$key]['quantity'] += $validated['quantity'];
+            $newQuantity = $cart[$key]['quantity'] + $validated['quantity'];
+
+            if ($newQuantity > $product->stock) {
+                return redirect()->back()
+                    ->with('error', 'Sorry, total quantity in cart exceeds available stock.')
+                    ->withInput();
+            }
+
+            $cart[$key]['quantity'] = $newQuantity;
         } else {
             $cart[$key] = [
                 'product_id' => $validated['product_id'],
@@ -52,30 +68,38 @@ class CartController extends Controller
             ];
         }
 
-        // dd($cart);
-
         session(['cart' => $cart]);
-
-        // dd(session()->get('cart'));
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');
     }
 
     public function update(Request $request, $key)
     {
-        $request->validate([
+        $validated = $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$key])) {
-            $cart[$key]['quantity'] = $request->quantity;
-            session(['cart' => $cart]);
+        if (!isset($cart[$key])) {
+            return redirect()->route('cart.index')->with('error', 'Product not found in cart.');
         }
 
-        return redirect()->back();
+        $productId = $cart[$key]['product_id'];
+        $product = Product::findOrFail($productId);
+
+        if ($validated['quantity'] > $product->stock) {
+            return redirect()->route('cart.index')
+                ->with('error', 'Sorry, quantity exceeds available stock.');
+        }
+
+        $cart[$key]['quantity'] = $validated['quantity'];
+
+        session(['cart' => $cart]);
+
+        return redirect()->route('cart.index')->with('success', 'Cart updated successfully!');
     }
+
 
     public function destroy($key)
     {

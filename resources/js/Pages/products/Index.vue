@@ -232,7 +232,7 @@ function updateFilters() {
     if (!query[k]) delete query[k]
   })
 
-  Inertia.get('/products', query, {
+  Inertia.get('/', query, {
     preserveState: true,
     preserveScroll: true,
     replace: true
@@ -247,7 +247,7 @@ const pages = computed(() => {
 
 // Go to specific page
 function goToPage(page) {
-  Inertia.get('/products', {
+  Inertia.get('/', {
     ...props.filters,
     page
   }, {
