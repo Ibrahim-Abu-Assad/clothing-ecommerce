@@ -4,6 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Collection; // Add this import if not already present
 
 class Product extends Model
 {
@@ -12,60 +17,43 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
-        'brand_id',
-        'category_id',
         'price',
         'stock',
-        'sizes',
-        'colors',
+        'brand_id',
+        'category_id',
     ];
 
-    protected $casts = [
-        'price' => 'decimal:2',
-        'sizes' => 'array',
-        'colors' => 'array',
-    ];
-
-    // Here : The relationships
-    // Product relationship with brand
-    public function brand()
+    public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
     }
 
-    // Product relationship with category
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    // Product relationship with images
-    public function images()
+    public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);
     }
 
-    // Product relationship with variations
-    public function variations()
+    public function colors(): BelongsToMany
     {
-        return $this->hasMany(ProductColorSize::class);
+        return $this->belongsToMany(Color::class, 'product_color_size', 'product_id', 'color_id')
+                    ->withPivot('size_id')
+                    ->distinct(); // ADD THIS LINE
     }
 
-    // Product relationship with colors
-    public function colors()
+    public function sizes(): BelongsToMany
     {
-        return $this->belongsToMany(Color::class, 'product_color_size')->withTimestamps();
+        return $this->belongsToMany(Size::class, 'product_color_size', 'product_id', 'size_id')
+                    ->withPivot('color_id')
+                    ->distinct(); // ADD THIS LINE
     }
 
-    // Product relationship with sizes
-    public function sizes()
+    public function firstImage(): HasOne
     {
-        return $this->belongsToMany(Size::class, 'product_color_size')->withTimestamps();
-    }
-
-    // return the oldest image
-    public function firstImage()
-    {
-        return $this->hasOne(ProductImage::class)->latestOfMany();
+        return $this->hasOne(ProductImage::class)->oldestOfMany();
     }
 }

@@ -25,8 +25,6 @@ class ProductFactory extends Factory
             'stock' => fake()->numberBetween(0, 50),    // Random Stock
             'brand_id' => Brand::inRandomOrder()->first()->id,
             'category_id' => Category::inRandomOrder()->first()->id,
-            'sizes' => ['S', 'M', 'L', 'XL'], // Random sizes
-            'colors' => ['Red', 'Blue', 'Green', 'Black', 'White'], // Random colors
         ];
     }
 }
