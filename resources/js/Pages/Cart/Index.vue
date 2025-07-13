@@ -1,14 +1,10 @@
 <template>
-    <!-- Wrap the entire content of THIS page with AppLayout -->
     <AppLayout>
-        <!-- Optional: Content for the 'header' slot in AppLayout -->
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Your Shopping Cart</h2>
         </template>
 
-        <!-- The rest of your Cart/Index.vue content goes here, INSIDE AppLayout -->
         <div class="p-4 sm:p-6 max-w-4xl mx-auto">
-            <!-- Flash Message -->
             <div v-if="$page.props.flash?.success"
                 class="mb-6 p-4 rounded-lg bg-green-100 text-green-800 border border-green-200 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,7 +13,6 @@
                 {{ $page.props.flash.success }}
             </div>
 
-            <!-- Empty Cart -->
             <div v-if="Object.keys(cartItems).length === 0" class="text-center py-12">
                 <div class="mx-auto w-24 h-24 text-gray-400 mb-4">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,9 +28,7 @@
                 </a>
             </div>
 
-            <!-- Cart Items -->
             <div v-else class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <!-- Table Header -->
                 <div class="hidden md:grid grid-cols-12 bg-gray-50 p-4 border-b border-gray-200">
                     <div class="col-span-4 font-medium text-gray-700">Product</div>
                     <div class="col-span-1 font-medium text-gray-700 text-center">Size</div>
@@ -46,11 +39,9 @@
                     <div class="col-span-1"></div>
                 </div>
 
-                <!-- Cart Items -->
                 <div v-for="(item, key) in cartItems" :key="key"
                     class="p-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                        <!-- Product Info -->
                         <div class="col-span-4 flex items-center space-x-4">
                             <img :src="item.image || 'https://via.placeholder.com/100x100?text=Product'"
                                 alt="Product image" class="w-16 h-16 object-cover rounded-lg border border-gray-200">
@@ -61,19 +52,16 @@
                             </div>
                         </div>
 
-                        <!-- Size -->
-                        <div class="col-span-1 text-center text-gray-700">
+                        <div class="col-span-1 text-center text-gray-700 px-2">
                             <span class="md:hidden text-sm text-gray-500">Size: </span>
-                            {{ item.size || '-' }}
+                            {{ item.size_name || '-' }}
                         </div>
 
-                        <!-- Color -->
-                        <div class="col-span-1 text-center text-gray-700">
+                        <div class="col-span-1 text-center text-gray-700 px-2">
                             <span class="md:hidden text-sm text-gray-500">Color: </span>
-                            {{ item.color || '-' }}
+                            {{ item.color_name || '-' }}
                         </div>
 
-                        <!-- Quantity -->
                         <div class="col-span-2">
                             <div class="flex items-center justify-center space-x-2">
                                 <input type="number" :value="item.quantity" min="1" :max="item.stock"
@@ -82,19 +70,16 @@
                             </div>
                         </div>
 
-                        <!-- Price -->
                         <div class="col-span-1 text-center text-gray-700">
                             <span class="md:hidden text-sm text-gray-500">Price: </span>
                             ${{ item.price ?? 0 }}
                         </div>
 
-                        <!-- Subtotal -->
                         <div class="col-span-2 text-center font-medium text-gray-800">
                             <span class="md:hidden text-sm text-gray-500">Subtotal: </span>
                             ${{ ((item.price ?? 0) * item.quantity).toFixed(2) }}
                         </div>
 
-                        <!-- Remove -->
                         <div class="col-span-1 text-center">
                             <button type="button" @click="removeItem(key)"
                                 class="text-red-600 hover:text-red-800 transition-colors p-1 rounded-full hover:bg-red-50">
@@ -108,7 +93,6 @@
                     </div>
                 </div>
 
-                <!-- Cart Footer -->
                 <div class="p-4 bg-gray-50 border-t border-gray-200">
                     <div class="flex justify-between items-center">
                         <a :href="route('products.index')"
@@ -121,10 +105,6 @@
                         </a>
                         <div class="flex items-center space-x-6">
                             <div class="text-lg font-bold text-gray-800">Total: ${{ total }}</div>
-                            <!-- <a href="/checkout"
-                                class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                                Proceed to Checkout
-                            </a> -->
                             <a href="/checkout" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                                 Proceed to Checkout
                             </a>
