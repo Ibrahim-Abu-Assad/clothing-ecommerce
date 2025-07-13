@@ -133,7 +133,7 @@ Before running the project, make sure you have the following software installed 
     ```bash
     npm run dev
     ```
-    *(For production, you would use `npm run build` or `yarn build`.)*
+    *(For production, you would use `npm run build`)*
 
 9.  **Start the Development Server:**
     ```bash
