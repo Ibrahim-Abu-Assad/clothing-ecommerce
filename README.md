@@ -68,3 +68,90 @@ This platform allows users to browse, filter, search, and purchase clothing prod
 
 ---
 
+## 🚀 Getting Started
+
+### Prerequisites
+
+Before running the project, make sure you have the following software installed on your machine:
+
+* **PHP** (version 8.3 or higher)
+* **Composer**
+* **Node.js and NPM** (or Yarn)
+* **MySQL Database Server**
+* **Git**
+
+---
+
+### Installation and Setup
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone https://github.com/Ibrahim-Abu-Assad/clothing-ecommerce.git
+    cd clothing-ecommerce
+    ```
+
+2.  **Copy the Environment File:**
+    ```bash
+    cp .env.example .env
+    ```
+
+3.  **Install PHP Dependencies:**
+    ```bash
+    composer install
+    ```
+
+4.  **Generate Application Key:**
+    ```bash
+    php artisan key:generate
+    ```
+
+5.  **Install Frontend Packages:**
+    ```bash
+    npm install
+    ```
+    
+6.  **Configure Database:**
+    Open the `.env` file and update your database connection details:
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=clothing_ecommerce # the database name
+    DB_USERNAME=root
+    DB_PASSWORD=''       # (empty for root without password)
+    ```
+    Make sure to replace `your_username` and `your_password` with your actual MySQL credentials. You should create the database (`clothing_ecommerce`) manually in your MySQL server if it doesn't exist.
+
+    Before running migrations, make sure you have already created a MySQL database named `clothing_ecommerce`.
+
+7.  **Run Migrations and Seeders :**
+    ```bash
+    php artisan migrate --seed
+    ```
+    
+8.  **Build Frontend Assets with Vite:**
+    ```bash
+    npm run dev
+    ```
+    *(For production, you would use `npm run build` or `yarn build`.)*
+
+9.  **Start the Development Server:**
+    ```bash
+    php artisan serve
+    ```
+
+### Access the Application
+
+Open your web browser and navigate to:
+
+http://127.0.0.1:8000
+
+---
+
+## 👤 Author
+
+**Ibrahim Abu-Assad**  
+[GitHub Profile](https://github.com/Ibrahim-Abu-Assad)
+
+
+
